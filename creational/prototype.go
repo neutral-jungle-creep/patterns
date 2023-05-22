@@ -35,8 +35,8 @@ func (b *Box) clone() Cloneable {
 
 	var cloneContent []Cloneable
 	for _, i := range b.content {
-		copy := i.clone()
-		cloneContent = append(cloneContent, copy)
+		iCopy := i.clone()
+		cloneContent = append(cloneContent, iCopy)
 	}
 
 	cloneBox.content = cloneContent
