@@ -12,22 +12,21 @@ import (
 // this example uses mutex and checks singleInstance for nil
 // second check needed if more than one goroutine passed the first
 var lock = &sync.Mutex{}
-var singleInstance *сounter
+var singleInstance *counter
 
-type сounter struct {
+type counter struct {
 	val int
 }
 
-func GetCounter() *сounter {
+func getCounter() *counter {
 	if singleInstance == nil {
 		lock.Lock()
 		defer lock.Unlock()
 
 		if singleInstance == nil {
-			singleInstance = &сounter{}
+			singleInstance = &counter{}
 		}
 	}
-
 	return singleInstance
 }
 
@@ -37,7 +36,7 @@ func GetCounter() *сounter {
 var once sync.Once
 var logger *logrus.Logger
 
-func GetLogger() *logrus.Logger {
+func getLogger() *logrus.Logger {
 	once.Do(func() {
 		logger = logrus.New()
 		logger.SetReportCaller(true)
@@ -52,4 +51,11 @@ func GetLogger() *logrus.Logger {
 		logger.SetLevel(logrus.InfoLevel)
 	})
 	return logger
+}
+
+func RunSingleton() {
+	for i := 0; i < 30; i++ {
+		go getCounter()
+		go getLogger()
+	}
 }
